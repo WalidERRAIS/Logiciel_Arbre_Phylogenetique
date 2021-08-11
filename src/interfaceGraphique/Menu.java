@@ -409,15 +409,19 @@ public class Menu extends JFrame {
 	private void createBtnRunMultipleAlignment() {
 		btnRunMultipleAlignment = new JButton("Lancez Alignement Multiple");
 		btnRunMultipleAlignment.addActionListener(new ActionListener() {
+			/**
+			 * Au clic sur le bouton lance l'alignement multiple des séquences entrées 
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Sequence sequenceQuery = new Sequence(entrezSequence.getText(), "SequencesQuery", (String) choixTypeSequence.getSelectedItem());
-//					System.out.println(sequenceQuery.getNomSequence()+ " : \r"+ sequenceQuery.getSequence());
-//					System.out.println();
-					sequenceQuery.AfficheAllSequences();
+					Sequence query = new Sequence(entrezSequence.getText(), "SequenceQuery", (String) choixTypeSequence.getSelectedItem());
+					query.setNomAllSequences();
+					query.setAllSequences();
+					query.AfficheAllSequences();
+					query.affiche();
 				}
 				catch (IllegalArgumentException e1) {
-					JOptionPane.showMessageDialog(entrezSequence,"Erreur! Entrez au moins deux séquences!","Alert",JOptionPane.WARNING_MESSAGE);     
+					JOptionPane.showMessageDialog(entrezSequence,"Erreur! Entrez au moins deux séquences au format fasta!","Alert",JOptionPane.WARNING_MESSAGE);     
 				}
 			}
 		});
