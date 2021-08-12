@@ -70,7 +70,7 @@ public class Menu extends JFrame {
 		contentPane.add(createInternalFrameAlignement());
 
 	}
-	
+
 	/**
 	 * Construction de la barre d'outils
 	 * @return toolBar retourne la barre d'outils
@@ -96,8 +96,8 @@ public class Menu extends JFrame {
 
 		return toolBar;
 	}
-	
-	
+
+
 	/**
 	 * Construction d'un internal frame pour l'alignement
 	 * @return internalFrame retourne le frame interne d'Alignement
@@ -107,12 +107,12 @@ public class Menu extends JFrame {
 		internalFrame.setBounds(79, 0, 806, 563);
 		internalFrame.getContentPane().setLayout(null);
 		internalFrame.setVisible(true);
-		
+
 		/*
 		 * Cadre step 1
 		 */
 		createLabelStepOne();
-		
+
 		/*
 		 * label choix type sequence
 		 */
@@ -175,7 +175,7 @@ public class Menu extends JFrame {
 
 		return internalFrame;
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction de l'étape 1
 	 */
@@ -186,7 +186,7 @@ public class Menu extends JFrame {
 		labelStepOne.setBounds(6, 19, 314, 31);
 		internalFrame.getContentPane().add(labelStepOne);
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction choix du type de séquences
 	 */
@@ -196,7 +196,7 @@ public class Menu extends JFrame {
 		labelChoixTypeSequence.setBounds(6, 62, 248, 31);
 		internalFrame.getContentPane().add(labelChoixTypeSequence);
 	}
-	
+
 	/**
 	 * Affiche une liste pour choisir le type de séquences
 	 */
@@ -206,7 +206,7 @@ public class Menu extends JFrame {
 		choixTypeSequence.setBounds(6, 88, 773, 26);
 		internalFrame.getContentPane().add(choixTypeSequence);
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction du format de séquences à entrer
 	 */
@@ -216,7 +216,7 @@ public class Menu extends JFrame {
 		labelSequenceFormat.setBounds(6, 125, 248, 16);
 		internalFrame.getContentPane().add(labelSequenceFormat);
 	}
-	
+
 	/**
 	 * Affiche un champs pour y rentrer les séquences
 	 */
@@ -228,7 +228,7 @@ public class Menu extends JFrame {
 		scrollPane.setViewportView(entrezSequence);
 		entrezSequence.setLineWrap(true);
 	}
-	
+
 	/**
 	 * Affiche un menu popup au clic droit
 	 * de la souris dans le champs de saisi des séquences
@@ -238,7 +238,7 @@ public class Menu extends JFrame {
 		//popup menu
 		popupMenuEntrezSeq = new JPopupMenu();
 		addPopup(entrezSequence, popupMenuEntrezSeq);
-		
+
 		//item copier
 		itemCopier = new JMenuItem("Copier");
 		itemCopier.addActionListener(new ActionListener() {
@@ -251,7 +251,7 @@ public class Menu extends JFrame {
 		});
 		itemCopier.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
 		popupMenuEntrezSeq.add(itemCopier);
-		
+
 		//item coller
 		itemColler = new JMenuItem("Coller");
 		itemColler.addActionListener(new ActionListener() {
@@ -264,7 +264,7 @@ public class Menu extends JFrame {
 		});
 		itemColler.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		popupMenuEntrezSeq.add(itemColler);
-		
+
 		//item couper
 		itemCouper = new JMenuItem("Couper");
 		itemCouper.addActionListener(new ActionListener() {
@@ -278,7 +278,7 @@ public class Menu extends JFrame {
 		itemCouper.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
 		popupMenuEntrezSeq.add(itemCouper);
 	}
-	
+
 	/**
 	 * Ajoute un menu popup dans un composant
 	 * @param component composant dans lequel on ajoute le menu
@@ -304,7 +304,7 @@ public class Menu extends JFrame {
 			}
 		});
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction de choix d'un fichier contenant les séquences
 	 */
@@ -314,7 +314,7 @@ public class Menu extends JFrame {
 		labelChoixFichier.setBounds(16, 287, 302, 26);
 		internalFrame.getContentPane().add(labelChoixFichier);
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction "Aucun fichier choisi" 
 	 * ou le nom du fichier choisi renvoyé par la méthode choixFichier
@@ -326,7 +326,7 @@ public class Menu extends JFrame {
 		labelFichierChoisi.setBounds(506, 290, 273, 23);
 		internalFrame.getContentPane().add(labelFichierChoisi);
 	}
-	
+
 	/**
 	 * Affiche un bouton "Choisir un fichier" 
 	 * qui au clic appelle la méthode choixFichier
@@ -348,7 +348,7 @@ public class Menu extends JFrame {
 		btnChoisirFichier.setBounds(330, 286, 135, 28);
 		internalFrame.getContentPane().add(btnChoisirFichier);
 	}
-	
+
 	/**
 	 * Ouvre une fenetre de dialogue pour le choix
 	 * d'un fichier avec l'extension .fasta
@@ -367,11 +367,11 @@ public class Menu extends JFrame {
 				System.out.println(br.readLine());
 				br.close();
 			} catch (Exception e1) {
-			    JOptionPane.showMessageDialog(internalFrame,"Erreur survenu lors de l'ouverture du fichier","Alert",JOptionPane.WARNING_MESSAGE);     
+				JOptionPane.showMessageDialog(internalFrame,"Erreur survenu lors de l'ouverture du fichier","Alert",JOptionPane.WARNING_MESSAGE);     
 			}
 		}
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction de l'étape 2
 	 */
@@ -382,7 +382,7 @@ public class Menu extends JFrame {
 		labelStepTwo.setBounds(6, 330, 241, 31);
 		internalFrame.getContentPane().add(labelStepTwo);
 	}
-	
+
 	/**
 	 * Affiche un cadre avec l'instruction d'entrer la pénalité de gap
 	 */
@@ -392,7 +392,7 @@ public class Menu extends JFrame {
 		labelGapPenalty.setBounds(6, 373, 102, 31);
 		internalFrame.getContentPane().add(labelGapPenalty);
 	}
-	
+
 	/**
 	 * Affiche un champs pour y entrer la valeur de pénalité de gap
 	 */
@@ -402,7 +402,7 @@ public class Menu extends JFrame {
 		internalFrame.getContentPane().add(gapPenalty);
 		gapPenalty.setColumns(10);
 	}
-	
+
 	/**
 	 * Affiche un bouton qui au clic lance l'alignement multiple
 	 */
@@ -414,11 +414,19 @@ public class Menu extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Sequence query = new Sequence(entrezSequence.getText(), "SequenceQuery", (String) choixTypeSequence.getSelectedItem());
-					query.setNomAllSequences();
-					query.setAllSequences();
-					query.AfficheAllSequences();
-					query.affiche();
+					String seq= entrezSequence.getText();
+					boolean formatCorrect= Sequence.verifieFormatFasta(seq);
+					System.out.println(formatCorrect);
+					if (formatCorrect) {
+						Sequence query = new Sequence(entrezSequence.getText(), "SequenceQuery",
+								(String) choixTypeSequence.getSelectedItem());
+						query.setNomAllSequences();
+						query.setAllSequences();
+						query.AfficheAllSequences();
+						query.affiche();
+					}
+					else
+						throw new IllegalArgumentException();
 				}
 				catch (IllegalArgumentException e1) {
 					JOptionPane.showMessageDialog(entrezSequence,"Erreur! Entrez au moins deux séquences au format fasta!","Alert",JOptionPane.WARNING_MESSAGE);     
@@ -429,12 +437,12 @@ public class Menu extends JFrame {
 		btnRunMultipleAlignment.setBounds(7, 436, 218, 36);
 		internalFrame.getContentPane().add(btnRunMultipleAlignment);
 	}
-			
+
 	//Main
 	public static void main(String[] args) throws Exception {
 		UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		Menu menu= new Menu();
 		menu.setVisible(true); //rend visible la fenêtre
 	}
-		
+
 }
