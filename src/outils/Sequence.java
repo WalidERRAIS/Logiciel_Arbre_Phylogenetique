@@ -1,5 +1,6 @@
 package outils;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -12,21 +13,25 @@ public class Sequence {
 	protected int tailleSequence;
 	protected String typeSequence;
 	protected Sequence[] sequences;
-//	private static final int Multiline = 0;
-	
-	private static Pattern fastaPattern= Pattern.compile("^>.+\\n[ATGC]+", Pattern.DOTALL);
-	
-	
+
+
+
 	/**
 	 * retourne vrai si la séquence s match avec l'expression reguliere 
 	 * correspondant aux fichiers fasta
 	 * @param s correspond à la séquence à tester
 	 * @return vrai ou faux
 	 */
-	public static boolean verifieFormatFasta(String s) {
-		return fastaPattern.matcher(s).matches();
+	public static int verifieFormatFasta(String s) {
+		Pattern fastaPattern= Pattern.compile("^>.+\\n[ATGC]+", Pattern.MULTILINE & Pattern.UNIX_LINES);
+		Matcher countFastaMatcher= fastaPattern.matcher(s);
+		int count = 0;
+		while (countFastaMatcher.find()) {
+			count++;
+		}
+		return count;
 	}
-	
+
 	/**
 	 * Si au moins deux sequences sont entrées créer une sequence query contenant toutes les séquences
 	 * à aligner et fait appel au second constructeur pour créer 
@@ -38,7 +43,7 @@ public class Sequence {
 	 */
 	public Sequence(String s, String n, String t) {
 		int nbSeq= nbSequences(s);
-//		if (nbSeq>=2) {
+		if (nbSeq>=2) {
 			this.sequence= s;
 			this.nomSequence= n;
 			this.typeSequence= t;
@@ -48,9 +53,9 @@ public class Sequence {
 			for (int i=0; i<this.sequences.length; i++) {
 				this.sequences[i]= new Sequence("Sequence_"+(i+1), t);
 			}
-//		}
-//		else
-//			throw new IllegalArgumentException();
+		}
+		else
+			throw new IllegalArgumentException();
 	}
 
 	/**
@@ -152,7 +157,7 @@ public class Sequence {
 			fin= this.sequence.indexOf("\n", debut);
 		}
 	}
-	
+
 	/**
 	 * modifie les séquences
 	 */
@@ -168,7 +173,7 @@ public class Sequence {
 				fin = this.sequence.length();
 		}
 	}
-	
+
 	public void affiche() {
 		for (int i=0; i<this.sequences.length; i++) {
 			for (int j=0; j<this.sequences[i].getSequence().length(); j++) {
