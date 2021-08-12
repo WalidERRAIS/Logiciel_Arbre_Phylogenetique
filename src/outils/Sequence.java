@@ -12,16 +12,19 @@ public class Sequence {
 	protected int tailleSequence;
 	protected String typeSequence;
 	protected Sequence[] sequences;
-	private static Pattern fastaPattern= Pattern.compile("");
+//	private static final int Multiline = 0;
+	
+	private static Pattern fastaPattern= Pattern.compile("^>.+\\n[ATGC]+", Pattern.DOTALL);
+	
 	
 	/**
 	 * retourne vrai si la séquence s match avec l'expression reguliere 
 	 * correspondant aux fichiers fasta
 	 * @param s correspond à la séquence à tester
-	 * @return
+	 * @return vrai ou faux
 	 */
 	public static boolean verifieFormatFasta(String s) {
-		return fastaPattern.matcher(s).matches(); 
+		return fastaPattern.matcher(s).matches();
 	}
 	
 	/**
@@ -35,7 +38,7 @@ public class Sequence {
 	 */
 	public Sequence(String s, String n, String t) {
 		int nbSeq= nbSequences(s);
-		if (nbSeq>=2) {
+//		if (nbSeq>=2) {
 			this.sequence= s;
 			this.nomSequence= n;
 			this.typeSequence= t;
@@ -45,9 +48,9 @@ public class Sequence {
 			for (int i=0; i<this.sequences.length; i++) {
 				this.sequences[i]= new Sequence("Sequence_"+(i+1), t);
 			}
-		}
-		else
-			throw new IllegalArgumentException();
+//		}
+//		else
+//			throw new IllegalArgumentException();
 	}
 
 	/**
