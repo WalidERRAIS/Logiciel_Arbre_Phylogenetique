@@ -415,9 +415,10 @@ public class Menu extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String seq= entrezSequence.getText();
-					boolean formatCorrect= Sequence.verifieFormatFasta(seq);
-					System.out.println(formatCorrect);
-					if (formatCorrect) {
+					int nbSeq=Sequence.nbSequences(seq);
+					int countFormatCorrect= Sequence.verifieFormatFasta(seq);
+					System.out.println(countFormatCorrect);
+					if (countFormatCorrect==nbSeq) {
 						Sequence query = new Sequence(entrezSequence.getText(), "SequenceQuery",
 								(String) choixTypeSequence.getSelectedItem());
 						query.setNomAllSequences();
