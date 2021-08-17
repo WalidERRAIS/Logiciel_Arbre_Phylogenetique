@@ -2,7 +2,6 @@ package interfaceGraphique;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -35,6 +34,7 @@ public class Menu extends JFrame {
 	private JLabel labelChoixFichier;
 	private JLabel labelFichierChoisi;
 	private JButton btnChoisirFichier;
+//	private String sequenceFichier;
 	private JLabel labelStepTwo;
 	private JLabel labelGapPenalty;
 	private JTextField gapPenalty;
@@ -352,24 +352,34 @@ public class Menu extends JFrame {
 	/**
 	 * Ouvre une fenetre de dialogue pour le choix
 	 * d'un fichier avec l'extension .fasta
+	 * @return une chaîne de caractere correspondant à la sequence query
 	 */
-	private void choixFichier() {
+	private String choixFichier() {
+		String sequenceFichier = "";
+		BufferedReader br;
 		JFileChooser select = new JFileChooser();
+		// Filtre les fichiers pour n'afficher que les fichiers avec l'extension .fasta
 		select.addChoosableFileFilter(new FiltreExtensionFichier());
 		select.setAcceptAllFileFilterUsed(false);
+		//affiche "ouvrir" dans la fenetre de dialogue
 		int res = select.showDialog(internalFrame, "Ouvrir");
 		if (res==JFileChooser.APPROVE_OPTION) {
 			File f = select.getSelectedFile();
 			String filePath= f.getPath();
 			labelFichierChoisi.setText(f.getName());
 			try {
-				BufferedReader br= new BufferedReader(new FileReader(filePath));
-				System.out.println(br.readLine());
+				br= new BufferedReader(new FileReader(filePath));
+				while ( (sequenceFichier= br.readLine()) !=null) {
+//					sequenceFichier= br.readLine();
+					System.out.println(sequenceFichier);
+				} //implementer choix fichier ou cadre ///////////////////////////////////////////////////
 				br.close();
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(internalFrame,"Erreur survenu lors de l'ouverture du fichier","Alert",JOptionPane.WARNING_MESSAGE);     
 			}
 		}
+		System.out.println(sequenceFichier);
+		return sequenceFichier;
 	}
 
 	/**
@@ -414,18 +424,21 @@ public class Menu extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String seq= entrezSequence.getText();
-					int nbSeq=Sequence.nbSequences(seq);
-					int countFormatCorrect= Sequence.verifieFormatFasta(seq);
-					System.out.println(countFormatCorrect);
-					if (countFormatCorrect==nbSeq) {
-						Sequence query = new Sequence(entrezSequence.getText(), "SequenceQuery",
+					String seq = null;
+//					if ()
+//						seq= entrezSequence.getText();
+//					else {
+//						seq= sequenceFichier;
+//					}
+					//verifie au moins 2 séquences au format fasta
+					int nbSeq= Sequence.nbSequencesFormatFasta(seq);
+					if (nbSeq>=2) {
+						Sequence query = new Sequence(nbSeq, seq, "SequenceQuery",
 								(String) choixTypeSequence.getSelectedItem());
 						query.setNomAllSequences();
 						query.setAllSequences();
 						query.AfficheAllSequences();
-						query.affiche();
-					}
+					}	
 					else
 						throw new IllegalArgumentException();
 				}
@@ -438,12 +451,4 @@ public class Menu extends JFrame {
 		btnRunMultipleAlignment.setBounds(7, 436, 218, 36);
 		internalFrame.getContentPane().add(btnRunMultipleAlignment);
 	}
-
-	//Main
-	public static void main(String[] args) throws Exception {
-		UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		Menu menu= new Menu();
-		menu.setVisible(true); //rend visible la fenêtre
-	}
-
 }
