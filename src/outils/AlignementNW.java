@@ -1,8 +1,9 @@
 package outils;
 
 public class AlignementNW extends Sequence {
-	public AlignementNW(String s, String n, String t) {
-		super(s, n, t);
+	
+	public AlignementNW(int nbSeq, String s, String n, String t) {
+		super(nbSeq, s, n, t);
 		// TODO Auto-generated constructor stub
 	}
 
