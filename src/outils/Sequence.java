@@ -15,47 +15,41 @@ public class Sequence {
 	protected Sequence[] sequences;
 
 
-
 	/**
-	 * retourne vrai si la séquence s match avec l'expression reguliere 
-	 * correspondant aux fichiers fasta
-	 * @param s correspond à la séquence à tester
-	 * @return vrai ou faux
+	 * retourne le nombre de séquence à aligner  au format fasta 
+	 * @param s correspond à la chaîne de caractère entrée par l'utilisateur
+	 * @return nbSequences correspond au nombre de séquence contenu dans la chaîne entrée en paramètre
 	 */
-	public static int verifieFormatFasta(String s) {
-		Pattern fastaPattern= Pattern.compile("^>.+\\n[ATGC]+", Pattern.MULTILINE & Pattern.UNIX_LINES);
-		Matcher countFastaMatcher= fastaPattern.matcher(s);
-		int count = 0;
-		while (countFastaMatcher.find()) {
-			count++;
+	public static int nbSequencesFormatFasta(String s) {
+		int nbSequence=0;
+		Pattern fastaPattern= Pattern.compile("^>.+\\n[ABCDEFGHIKLMNPQRSTVWXYZ]+\\n?", Pattern.MULTILINE|Pattern.CASE_INSENSITIVE);
+		Matcher fastaMatch = fastaPattern.matcher(s);
+		while (fastaMatch.find()) {
+			nbSequence++;
 		}
-		return count;
+		return nbSequence;
 	}
 
 	/**
-	 * Si au moins deux sequences sont entrées créer une sequence query contenant toutes les séquences
-	 * à aligner et fait appel au second constructeur pour créer 
+	 * Si au moins deux sequences au format fasta sont entrées créer une sequence query
+	 * contenant toutes les séquences à aligner et fait appel au second constructeur pour créer 
 	 * un tableau de n sequences où chaque indice correspond à une sequence de la query
 	 * 
+	 * @param nbSeq correspond au nombre de séquence au format fasta
 	 * @param s correspond à la séquence
 	 * @param n correspond au nom de la séquence
 	 * @param t correspond au type de la séquence (protéine ou adn)
 	 */
-	public Sequence(String s, String n, String t) {
-		int nbSeq= nbSequences(s);
-		if (nbSeq>=2) {
-			this.sequence= s;
-			this.nomSequence= n;
-			this.typeSequence= t;
-			//Instancie un taleau de sequences avec autant de séquences : Sequence_1, Sequence_i...
-			//et de meme type que la sequence query
-			this.sequences= new Sequence[nbSeq];
-			for (int i=0; i<this.sequences.length; i++) {
-				this.sequences[i]= new Sequence("Sequence_"+(i+1), t);
-			}
+	public Sequence(int nbSeq, String s, String n, String t) {
+		this.sequence= s;
+		this.nomSequence= n;
+		this.typeSequence= t;
+		//Instancie un taleau de sequences avec autant de séquences : Sequence_1, Sequence_i...
+		//et de meme type que la sequence query
+		this.sequences= new Sequence[nbSeq];
+		for (int i=0; i<this.sequences.length; i++) {
+			this.sequences[i]= new Sequence("Sequence_"+(i+1), t);
 		}
-		else
-			throw new IllegalArgumentException();
 	}
 
 	/**
@@ -123,38 +117,19 @@ public class Sequence {
 	 */
 	public Sequence[] getAllSequences() {
 		return this.sequences;
-	}
-
-	/**
-	 * retourne le nombre de séquence à aligner si la chaîne entrée en paramètre est au format fasta
-	 * @param s correspond à la chaîne de caractère entrée par l'utilisateur
-	 * @return nbSequences correspond au nombre de séquence contenu dans la chaîne entrée en paramètre
-	 */
-	public static int nbSequences(String s) {
-		int nbSequences=0;
-		if (s.charAt(0)=='>') {
-			for (int i=0; i<s.length(); i++) {
-				if (s.charAt(i)=='>')
-					nbSequences++;
-			}
-		}
-		else 
-			throw new IllegalArgumentException();
-		return nbSequences;
-	}
+	}	
 
 	/**
 	 * modifie le nom des séquences 
 	 */
 	public void setNomAllSequences() {
-		int debut= 0; //position du premier ">"
-		int fin= this.sequence.indexOf("\n"); //fin du nom au saut de ligne 
+		Pattern nomSeqPattern= Pattern.compile("^>.+\\n?", Pattern.MULTILINE);
+		Matcher nomSeqMatch = nomSeqPattern.matcher(this.sequence);
 		for (int i=0; i<this.sequences.length; i++) {
-			this.sequences[i].setNomSequence(this.sequence.substring(debut, fin));
-			//supprime les ">" des noms de séquence
-			this.sequences[i].setNomSequence(this.sequences[i].getNomSequence().replaceAll(">", ""));
-			debut= this.sequence.indexOf(">", fin);
-			fin= this.sequence.indexOf("\n", debut);
+			if (nomSeqMatch.find()) {
+				//supprime les ">" des noms de séquence
+				this.sequences[i].setNomSequence(nomSeqMatch.group().replace(">", ""));
+			}
 		}
 	}
 
@@ -162,24 +137,12 @@ public class Sequence {
 	 * modifie les séquences
 	 */
 	public void setAllSequences() {
-		int debut= this.sequence.indexOf("\n")+1; //debut sequence après saut de ligne
-		int fin= this.sequence.indexOf("\n", debut); //fin de la séquence au saut de ligne
+		Pattern seqPattern= Pattern.compile("^[ABCDEFGHIKLMNPQRSTVWXYZ]+", Pattern.MULTILINE|Pattern.CASE_INSENSITIVE);
+		Matcher seqMatch = seqPattern.matcher(this.sequence);
 		for (int i=0; i<this.sequences.length; i++) {
-			this.sequences[i].setSequence(this.sequence.substring(debut, fin));
-			this.sequences[i].setSequence(this.sequences[i].getSequence().trim()); //enlève les blancs de la séquence
-			debut= this.sequence.indexOf("\n", fin+1)+1;
-			fin= this.sequence.indexOf("\n", debut);
-			if (fin==-1)
-				fin = this.sequence.length();
-		}
-	}
-
-	public void affiche() {
-		for (int i=0; i<this.sequences.length; i++) {
-			for (int j=0; j<this.sequences[i].getSequence().length(); j++) {
-				System.out.println(j+" : "+this.sequences[i].getSequence().charAt(j));
+			if (seqMatch.find()) {
+				this.sequences[i].setSequence(seqMatch.group());
 			}
-			System.out.println();
 		}
 	}
 
