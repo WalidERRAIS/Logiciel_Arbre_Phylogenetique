@@ -34,7 +34,7 @@ public class Menu extends JFrame {
 	private JLabel labelChoixFichier;
 	private JLabel labelFichierChoisi;
 	private JButton btnChoisirFichier;
-	private StringBuilder sequenceFichier = new StringBuilder();
+	private StringBuilder sequenceFichier = null;
 	private JLabel labelStepTwo;
 	private JLabel labelGapPenalty;
 	private JTextField gapPenalty;
@@ -354,12 +354,13 @@ public class Menu extends JFrame {
 	 * d'un fichier avec l'extension .fasta
 	 * @return une chaîne de caractere correspondant à la sequence query
 	 */
-	private String choixFichier() {
+	private void choixFichier() {
 		String line;
 		BufferedReader br;
-//		sequenceFichier= new StringBuilder();
 		File f;
 		String filePath;
+		//instancie sequenceFichier lorsque l'utilisateur choisi un fichier
+		sequenceFichier= new StringBuilder();
 		JFileChooser select = new JFileChooser();
 		// Filtre les fichiers pour n'afficher que les fichiers avec l'extension .fasta
 		select.addChoosableFileFilter(new FiltreExtensionFichier());
@@ -375,13 +376,12 @@ public class Menu extends JFrame {
 				while ( (line= br.readLine()) !=null) {
 					sequenceFichier.append(line);
 					sequenceFichier.append("\n");
-				} //implementer choix fichier ou cadre ///////////////////////////////////////////////////
+				}
 				br.close();
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(internalFrame,"Erreur survenu lors de l'ouverture du fichier","Alert",JOptionPane.WARNING_MESSAGE);     
 			}
 		}
-		return sequenceFichier.toString();
 	}
 
 	/**
@@ -427,11 +427,18 @@ public class Menu extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String seq = null;
+					//si aucun fichier choisi prend sequence cadre entrer sequence
 					if (sequenceFichier==null)
 						seq= entrezSequence.getText();
-					else {
-						seq= sequenceFichier;
-					}
+					//si cadre entrer sequence null prend fichier choisi
+					else if (entrezSequence.getText()==null) 
+						seq= sequenceFichier.toString();
+					//si les deux sont pleins prend fichier choisi
+					else if ((sequenceFichier!=null)&&(entrezSequence.getText()!=null))
+						seq= sequenceFichier.toString();
+					//si les deux sont null lance une exception
+					else
+						throw new IllegalArgumentException();
 					//verifie au moins 2 séquences au format fasta
 					int nbSeq= Sequence.nbSequencesFormatFasta(seq);
 					if (nbSeq>=2) {
