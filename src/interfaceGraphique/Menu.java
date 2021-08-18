@@ -34,7 +34,7 @@ public class Menu extends JFrame {
 	private JLabel labelChoixFichier;
 	private JLabel labelFichierChoisi;
 	private JButton btnChoisirFichier;
-//	private String sequenceFichier;
+	private StringBuilder sequenceFichier = new StringBuilder();
 	private JLabel labelStepTwo;
 	private JLabel labelGapPenalty;
 	private JTextField gapPenalty;
@@ -355,8 +355,11 @@ public class Menu extends JFrame {
 	 * @return une chaîne de caractere correspondant à la sequence query
 	 */
 	private String choixFichier() {
-		String sequenceFichier = "";
+		String line;
 		BufferedReader br;
+//		sequenceFichier= new StringBuilder();
+		File f;
+		String filePath;
 		JFileChooser select = new JFileChooser();
 		// Filtre les fichiers pour n'afficher que les fichiers avec l'extension .fasta
 		select.addChoosableFileFilter(new FiltreExtensionFichier());
@@ -364,22 +367,21 @@ public class Menu extends JFrame {
 		//affiche "ouvrir" dans la fenetre de dialogue
 		int res = select.showDialog(internalFrame, "Ouvrir");
 		if (res==JFileChooser.APPROVE_OPTION) {
-			File f = select.getSelectedFile();
-			String filePath= f.getPath();
+			f = select.getSelectedFile();
+			filePath= f.getPath();
 			labelFichierChoisi.setText(f.getName());
 			try {
 				br= new BufferedReader(new FileReader(filePath));
-				while ( (sequenceFichier= br.readLine()) !=null) {
-//					sequenceFichier= br.readLine();
-					System.out.println(sequenceFichier);
+				while ( (line= br.readLine()) !=null) {
+					sequenceFichier.append(line);
+					sequenceFichier.append("\n");
 				} //implementer choix fichier ou cadre ///////////////////////////////////////////////////
 				br.close();
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(internalFrame,"Erreur survenu lors de l'ouverture du fichier","Alert",JOptionPane.WARNING_MESSAGE);     
 			}
 		}
-		System.out.println(sequenceFichier);
-		return sequenceFichier;
+		return sequenceFichier.toString();
 	}
 
 	/**
@@ -425,11 +427,11 @@ public class Menu extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String seq = null;
-//					if ()
-//						seq= entrezSequence.getText();
-//					else {
-//						seq= sequenceFichier;
-//					}
+					if (sequenceFichier==null)
+						seq= entrezSequence.getText();
+					else {
+						seq= sequenceFichier;
+					}
 					//verifie au moins 2 séquences au format fasta
 					int nbSeq= Sequence.nbSequencesFormatFasta(seq);
 					if (nbSeq>=2) {
